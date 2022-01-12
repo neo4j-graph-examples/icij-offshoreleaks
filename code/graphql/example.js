@@ -54,7 +54,7 @@ type Intermediary {
   node_id: String!
   sourceID: String!
   valid_until: String!
-  intermediary_of: [Entity] @relationship(type: "intermediary_of", direction: OUT)
+  connected_to: [Entity] @relationship(type: "connected_to", direction: OUT)
 }
 
 type Officer {
@@ -68,6 +68,7 @@ type Officer {
   registered_address: [Address]
     @relationship(type: "registered_address", direction: OUT)
   officer_of: [Entity] @relationship(type: "officer_of", direction: OUT)
+  connected_to: [Entity] @relationship(type: "connected_to", direction: OUT)
   num_of_connected_entities: Int
     @cypher(
       statement: """
