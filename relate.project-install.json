@@ -3,19 +3,20 @@
     "description":"The Offshore Leaks dataset and guide from the International Consortium of Investigative Journalists (ICIJ)",
     "dbms": [
         {
-            "dumpFile": "https://data.neo4j.com/icij-offshoreleaks/icij-offshoreleaks-42.dump",
-            "targetNeo4jVersion": "4.2",
+            "dumpFile": "data.neo4j.com/icij-offshoreleaks/data/icij-offshoreleaks-42.dump",
+            "targetNeo4jVersion": ">=4.2.0 <4.3.0",
             "plugins": ["apoc", "graph-data-science"]
         },
         {
-            "dumpFile": "https://data.neo4j.com/icij-offshoreleaks/icij-offshoreleaks-43.dump",
-            "targetNeo4jVersion": "4.3",
+            "dumpFile": "data.neo4j.com/icij-offshoreleaks/data/icij-offshoreleaks-43.dump",
+            "targetNeo4jVersion": ">=4.3.0 <5.0.0",
             "plugins": ["apoc", "graph-data-science"]
         },
         {
-            "dumpFile": "https://data.neo4j.com/icij-offshoreleaks/icij-offshoreleaks-44.dump",
-            "targetNeo4jVersion": "4.4",
+            "dumpFile": "data.neo4j.com/icij-offshoreleaks/data/icij-offshoreleaks-50.dump",
+            "targetNeo4jVersion": ">=5.0.0 <6.0.0",
             "plugins": ["apoc", "graph-data-science"]
         }
+  
     ]
 }
