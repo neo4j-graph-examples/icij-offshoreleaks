@@ -19,6 +19,9 @@
 :from-file-step-1: documentation/img/step-1-import-dump-file.png
 :from-file-step-2: documentation/img/step-2-create-new-db-from-file.png
 
+:nodes: 1,908,466
+:relationships: 3,193,390
+
 :todo: false
 image::{icon}[width=100]
 
@@ -29,6 +32,8 @@ Description: _{description}_
 ifeval::[{todo} != false]
 To Do: {todo}
 endif::[]
+
+Nodes {nodes} Relationships {relationships}
 
 .Model
 image::{model}[]
