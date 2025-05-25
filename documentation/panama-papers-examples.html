@@ -424,7 +424,7 @@ ORDER BY entities DESC LIMIT 10</code></pre>
                     <div class="listingblock">
                         <div class="content">
 <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
-        class="cypher language-cypher">:param officer:"<span value-key="officer">A Name</span>"</code></pre>
+        class="cypher language-cypher">:param officer=>"<span value-key="officer">A Name</span>"</code></pre>
                         </div>
                     </div>
                     <div class="listingblock">
@@ -494,7 +494,7 @@ RETURN path LIMIT 100</code></pre>
                     <div class="listingblock">
                         <div class="content">
 <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding">
-<code class="cypher language-cypher">:param entity:"<span value-key="entity">An Entity</span>"</code></pre>
+<code class="cypher language-cypher">:param entity=>"<span value-key="entity">An Entity</span>"</code></pre>
                         </div>
                     </div>
                     <div class="listingblock">
@@ -720,7 +720,7 @@ ORDER BY number DESC LIMIT 10</code></pre>
                     <form>
                         <div class="node">
                             <div class="form-group">
-                                <label>City:</label> <input value-for="state" value="London" class="form-control">
+                                <label>City:</label> <input value-for="city" value="London" class="form-control">
                                 <label>State/country:</label> <input value-for="state" value="United Kingdom" class="form-control">
                             </div>
                         </div>
@@ -984,6 +984,17 @@ ORDER BY number DESC LIMIT 10</code></pre>
                 <br/>
                 <div>
                     <div class="paragraph">
+                        <p>We start by projecting the graph into an in-memory represenation suitable for heavy computation</p>
+                    </div>
+                    <div class="listingblock">
+                        <div class="content">
+                        <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
+        class="cypher language-cypher">call gds.graph.project("offshoreleaks","*","*");
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="paragraph">
                         <p>PageRank is an algorithm used for instance by Google to rank websites in their search engine
                             results.
                             It assumes that more important entities are likely to have more connections pointing to
@@ -996,7 +1007,7 @@ ORDER BY number DESC LIMIT 10</code></pre>
                     <div class="listingblock">
                         <div class="content">
 <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
-        class="cypher language-cypher">CALL gds.pageRank.stream({nodeProjection:'*',relationshipProjection:'*'}) YIELD nodeId, score
+        class="cypher language-cypher">CALL gds.pageRank.stream("offshoreleaks") YIELD nodeId, score
         WITH gds.util.asNode(nodeId) as node, score
         WHERE node:Entity AND node.sourceID = "Panama Papers"
         RETURN node.name AS entity, score
@@ -1014,7 +1025,7 @@ ORDER BY number DESC LIMIT 10</code></pre>
                     <div class="listingblock">
                         <div class="content">
 <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
-        class="cypher language-cypher">CALL gds.pageRank.stream({nodeProjection:'*',relationshipProjection:'*'}) YIELD nodeId, score
+        class="cypher language-cypher">CALL gds.pageRank.stream("offshoreleaks") YIELD nodeId, score
         WITH gds.util.asNode(nodeId) as node, score
         WHERE node:Address AND node.sourceID = "Panama Papers"
 WITH * ORDER BY score DESC  LIMIT 10
