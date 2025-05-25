@@ -299,7 +299,7 @@ RETURN labels(node) AS type,count(*)</code></pre>
                             <div class="listingblock">
                                 <div class="content">
     <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
-            class="cypher language-cypher">MATCH (i:Intermediary) WHERE size( (i)--() ) &gt; 100 AND i.sourceID STARTS WITH "Paradise Papers"
+            class="cypher language-cypher">MATCH (i:Intermediary) WHERE count {  (i)--()  } &gt; 100 AND i.sourceID STARTS WITH "Paradise Papers"
 MATCH (i)-[connection]-(entity)
 RETURN i.name as intermediary, type(connection) as relationship, head(labels(entity)) as type, count(*) as count
 ORDER BY count DESC LIMIT 20</code></pre>
@@ -316,7 +316,7 @@ ORDER BY count DESC LIMIT 20</code></pre>
                     <div class="listingblock">
                         <div class="content">
     <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
-            class="cypher language-cypher">MATCH (i:Intermediary) WHERE i.sourceID STARTS WITH "Paradise Papers" AND size( (i)--() ) &gt; 100
+            class="cypher language-cypher">MATCH (i:Intermediary) WHERE i.sourceID STARTS WITH "Paradise Papers" AND count {  (i)--()  } &gt; 100
 MATCH (i)-[connection]-(entity)
 RETURN i.name as intermediary, type(connection) as relationship, head(labels(entity)) as type, count(*) as count
 ORDER BY count DESC LIMIT 20</code></pre>
@@ -524,7 +524,7 @@ LIMIT 100</code></pre>
 <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
         class="cypher language-cypher">MATCH (o1:Officer)-[r1]-&gt;(e:Entity)&lt;-[r2]-(o2:Officer)
 USING JOIN ON e
-WHERE id(o1) &lt; id(o2) AND size( (o1)--&gt;() ) &gt; 10 AND size( (o2)--&gt;() ) &gt; 10 AND o1.sourceID STARTS WITH "Paradise Papers"
+WHERE id(o1) &lt; id(o2) AND count {  (o1)--&gt;() } &gt; 10 AND count { (o2)--&gt;()  } &gt; 10 AND o1.sourceID STARTS WITH "Paradise Papers"
 WITH o1,o2,count(*) as freq, collect(e)[0..10] as entities
 WHERE freq &gt; 10
 WITH * ORDER BY freq DESC LIMIT 10
@@ -544,7 +544,7 @@ RETURN o1.name, o2.name, freq, [e IN entities | e.name]
 USING JOIN ON e
 WHERE id(o1) &lt; id(o2) AND NOT o1.name CONTAINS "LIMITED" AND NOT o1.name CONTAINS "Limited" AND o1.sourceID STARTS WITH "Paradise Papers"
 AND NOT o2.name CONTAINS "Limited" AND NOT o2.name CONTAINS "LIMITED"
-AND size( (o1)--&gt;() ) &gt; 10 AND size( (o2)--&gt;() ) &gt; 10
+AND count {  (o1)--&gt;() } &gt; 10 AND count { (o2)--&gt;() } &gt; 10
 WITH o1,o2,count(*) as freq, collect(e)[0..10] as entities
 WHERE freq &gt; 10
 WITH * ORDER BY freq DESC LIMIT 10
@@ -563,7 +563,7 @@ RETURN o1.name, o2.name, freq, [e IN entities | e.name]
 USING JOIN ON e
 WHERE id(o1) &lt; id(o2) AND NOT o1.name CONTAINS "LIMITED" AND NOT o1.name CONTAINS "Limited" AND o1.sourceID STARTS WITH "Paradise Papers"
 AND NOT o2.name CONTAINS "Limited" AND NOT o2.name CONTAINS "LIMITED"
-AND size( (o1)--&gt;() ) &gt; 10 AND size( (o2)--&gt;() ) &gt; 10
+AND count {  (o1)--&gt;() } &gt; 10 AND count { (o2)--&gt;()  } &gt; 10
 WITH o1,o2,count(*) as freq, collect(e)[0..10] as entities
 WHERE freq &gt; 200
 RETURN o1,o2,apoc.create.vRelationship(o1,'JOINT',{freq:freq,entities:[e IN entities| e.name]},o2)
@@ -748,7 +748,7 @@ ORDER BY number DESC LIMIT 10</code></pre>
                     <form>
                         <div class="node">
                             <div class="form-group">
-                                <label>State/country:</label> <input value-for="state" value="Isle of Man"
+                                <label>State/country:</label> <input value-for="state" value="Bahamas"
                                                                      class="form-control">
                             </div>
                         </div>
@@ -758,7 +758,7 @@ ORDER BY number DESC LIMIT 10</code></pre>
           <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
                   class="cypher language-cypher">MATCH (a:Address)&lt;-[:registered_address]-(o:Officer),
 (o)-->(e:Entity)<-[:intermediary_of]-(i:Intermediary)
-WHERE a.address CONTAINS '<span value-key="state">Isle of Man</span>' AND a.sourceID STARTS WITH "Paradise Papers"
+WHERE a.address CONTAINS '<span value-key="state">Bahamas</span>' AND a.sourceID STARTS WITH "Paradise Papers"
 RETURN i.name AS intermediary, count(DISTINCT e) AS number 
 ORDER BY number DESC LIMIT 10</code></pre>
                         </div>
@@ -804,9 +804,9 @@ ORDER BY number DESC LIMIT 10</code></pre>
                     <div class="listingblock">
                         <div class="content">
 <pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code
-        class="cypher language-cypher">call db.index.fulltext.createNodeIndex('search',
-        ['Officer','Intermediary','Address','Entity'],
-        ['name','address'])</code></pre>
+        class="cypher language-cypher">create fulltext index search for
+        (n:Officer|Intermediary|Address|Entity)
+        on each [n.name,n.address]</code></pre>
                         </div>
                     </div>
                     <!--div class="paragraph">
